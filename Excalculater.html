@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="Excalculater.css">
+
+    
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const display = document.getElementById('display');
+    let currentOperand = '';
+    let previousOperand = '';
+    let operation = null;
+
+    function clear() {
+        currentOperand = '';
+        previousOperand = '';
+        operation = null;
+        updateDisplay();
+    }
+
+    function appendNumber(number) {
+        if (number === '0' && currentOperand === '0') return;
+        currentOperand = currentOperand.toString() + number.toString();
+        updateDisplay();
+    }
+
+    function chooseOperation(op) {
+        if (currentOperand === '') return;
+        if (previousOperand !== '') {
+            compute();
+        }
+        operation = op;
+        previousOperand = currentOperand;
+        currentOperand = '';
+    }
+
+    function compute() {
+        let result;
+        const prev = parseFloat(previousOperand);
+        const current = parseFloat(currentOperand);
+        if (isNaN(prev) || isNaN(current)) return;
+        switch (operation) {
+            case '+':
+                result = prev + current;
+                break;
+            case '-':
+                result = prev - current;
+                break;
+            case '*':
+                result = prev * current;
+                break;
+            case '/':
+                result = prev / current;
+                break;
+            default:
+                return;
+        }
+        currentOperand = result;
+        operation = null;
+        previousOperand = '';
+        updateDisplay();
+    }
+
+    function updateDisplay() {
+        display.innerText = currentOperand;
+    }
+
+    document.querySelectorAll('.key').forEach(button => {
+        button.addEventListener('click', () => {
+            const key = button.dataset.key;
+            if (!isNaN(key)) {
+                appendNumber(key);
+            } else if (key === 'C') {
+                clear();
+            } else if (key === '=') {
+                compute();
+            } else {
+                chooseOperation(key);
+            }
+        });
+    });
+});
+
+</script>
+    
+</head>
+
+<body>
+    <div class="calculator-grid">
+        <div class="display" id="display"></div>
+        <button class="key" data-key="1">1</button>
+        <button class="key" data-key="2">2</button>
+        <button class="key" data-key="3">3</button>
+        <button class="key operator" data-key="+">+</button>
+        <button class="key" data-key="4">4</button>
+        <button class="key" data-key="5">5</button>
+        <button class="key" data-key="6">6</button>
+        <button class="key operator" data-key="*">*</button>
+        <button class="key" data-key="7">7</button>
+        <button class="key" data-key="8">8</button>
+        <button class="key" data-key="9">9</button>
+        <button class="key operator" data-key="-">-</button>
+        <button class="key" data-key="=">=</button>
+        <button class="key" data-key="0">0</button>
+        <button class="key clear" data-key="C">C</button>
+        <button class="key operator" data-key="/">/</button>
+    </div>
+
+
+
+</body>
+
+</html>
